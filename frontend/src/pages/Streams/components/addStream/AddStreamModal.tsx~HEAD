@@ -1,0 +1,238 @@
+// ** Import Packages **
+
+// ** Components **
+
+import Icon from 'components/Icon';
+import AddUserModel from './AddStreamUserModal';
+import Modal from 'components/Modal';
+
+// ** Form Components **
+import { FormProvider, useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { streamSchema } from 'pages/Streams/validation-schema/streams.schema';
+
+// ** Hooks **
+import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useGetUsersPostAPI } from 'pages/Setting/user-setting/User/service/user.service';
+import {
+  useAddStreamAPI,
+  useEditStreamAPI,
+} from 'pages/Streams/hooks/stream.service';
+
+// ** Constants **
+import { PRIVATE_NAVIGATION } from 'constant/navigation.constant';
+import { useSelector, useDispatch } from 'react-redux';
+import _ from 'lodash';
+
+// ** types ** //
+import FormField from 'components/FormField';
+import {
+  AddStreamModelPropsType,
+  UserDataType,
+  UserIds,
+  streamFormFieldsType,
+} from 'pages/Streams/types/stream.type';
+import {
+  getStreamListViewState,
+  setStreamList,
+} from 'redux/slices/stream.Slice';
+
+const AddStreamModel = (props: AddStreamModelPropsType) => {
+  // ** Props **
+  const { streamData, setEditStream, getStreamsData } = props;
+
+  // ** Hooks **
+  const dispatch = useDispatch();
+
+  const { addStreamAPi } = useAddStreamAPI();
+  const { editStreamAPI } = useEditStreamAPI();
+  const formMethods = useForm<streamFormFieldsType>({
+    resolver: yupResolver(streamSchema),
+  });
+  const navigate = useNavigate();
+  const getStreamView = useSelector(getStreamListViewState);
+
+  // ** States **
+  const [isVisible, setIsVisible] = useState<boolean>(true);
+  const [userData, setUserData] = useState<UserDataType>();
+  const [userIdArray, pushIdIntoUserArray] = useState<string[]>([]);
+  const [userIds, setUserIds] = useState<UserIds>();
+  const { getUsersAPI } = useGetUsersPostAPI();
+  const [isSelectUserVisible, setIsSelectUserVisible] =
+    useState<boolean>(false);
+
+  const {
+    register,
+    formState: { errors },
+    handleSubmit,
+    setValue,
+    control,
+  } = formMethods;
+
+  // ** UseEffect **
+
+  // Get user details
+  useEffect(() => {
+    getUserList();
+  }, []);
+
+  // set Data at edit time
+  useEffect(() => {
+    if (streamData?.streamUser?.length) {
+      setValue('name', streamData?.name);
+      pushIdIntoUserArray(
+        streamData?.streamUser.map((user) => user?.users?.id.toString())
+      );
+    }
+  }, [streamData?.streamUser]);
+
+  // ** Functions & Event Handler **
+  const getUserList = async () => {
+    const { data } = await getUsersAPI({
+      query: {
+        'q[verified]': 'true',
+        limit: 100000,
+        page: 1,
+        select: 'id,first_name,last_name,full_name',
+      },
+    });
+    setUserData(data);
+  };
+
+  const onUserSubmit = () => {
+    setIsSelectUserVisible(false);
+    setUserIds([{ new: userIdArray || [], old: [], deleted: [] }]);
+  };
+  const onSubmit = handleSubmit(async (value) => {
+    let payload;
+    if (streamData?.id) {
+      const oldUserId = streamData?.streamUser.map((user) =>
+        user?.users?.id.toString()
+      );
+      if (streamData?.streamUser?.length && userIds) {
+        const newUserId = userIds[0]?.new
+          ?.slice()
+          ?.filter((index) => !oldUserId?.find((val) => val === index))
+          ?.map((val: string) => val);
+        const deletedUserIds = oldUserId
+          ?.slice()
+          ?.filter((index) => !userIds[0]?.new?.find((val) => val === index))
+          ?.map((val: string) => val);
+        payload = {
+          userIds: [
+            {
+              new: newUserId || [],
+              old: oldUserId || [],
+              deleted: deletedUserIds || [],
+            },
+          ],
+          ...value,
+        };
+        await editStreamAPI(streamData.id, payload);
+      }
+      await editStreamAPI(streamData.id, value);
+      close();
+    } else {
+      const { data } = await addStreamAPi({ userIds, ...value });
+      if (data) {
+        const users: any = [];
+        const userId: string[] = [];
+        const finalData = _.cloneDeep(getStreamView.sortStream.streamData);
+        finalData?.[0]?.streamUser?.forEach((element) => {
+          userId.push(element?.user_id?.toString());
+          users.push(element.users);
+        });
+        const streamUser = _.cloneDeep(data.userData);
+        streamUser?.forEach((element: any) => {
+          const user = userData?.rows.find(
+            (item) => item.id === element.user_id
+          );
+          if (user) {
+            element.users = user;
+          }
+        });
+        finalData.push({ name: value.name, id: data.stream_id, streamUser });
+        dispatch(
+          setStreamList({
+            sortStream: {
+              streamData: finalData,
+              selectedUserIs: getStreamView?.sortStream?.selectedUserIs,
+            },
+            tab: { label: finalData?.[0]?.name, id: finalData?.[0]?.id },
+            userIds: [finalData?.[0]?.streamUser[0]?.user_id?.toString()],
+            userData: {
+              rows: users,
+              count: users?.length,
+            },
+          })
+        );
+        close();
+      }
+    }
+  });
+  const close = () => {
+    if (setEditStream) setEditStream(undefined);
+    navigate(`/${PRIVATE_NAVIGATION.streams.view}`);
+    setIsVisible(false);
+    if (getStreamsData) getStreamsData();
+  };
+
+  return (
+    <>
+      <FormProvider {...formMethods}>
+        <form>
+          <Modal
+            title={streamData?.id ? 'Edit Stream' : 'Add Stream'}
+            visible={isVisible}
+            onClose={() => close()}
+            onCancel={() => close()}
+            submitButtonText={streamData?.id ? 'Edit Stream' : 'Add Stream'}
+            onSubmit={onSubmit}
+            width="440px"
+            saveButtonText="Save and Mark Done"
+            saveButtonDisabled={false}
+            modalWrapperClass="ip__Modal__Wrapper__new"
+          >
+            <div className="new__form__elements__design">
+              <FormField<streamFormFieldsType>
+                wrapperClass="mb-0"
+                required
+                type="text"
+                name="name"
+                isSearchable
+                label="Name"
+                labelClass="if__label__blue"
+                placeholder="Enter Name"
+                register={register}
+                control={control}
+                errors={errors}
+                error={errors.name}
+                fieldLimit={50}
+              />
+            </div>
+            <div className="action-btn mr-[4px] hidden">
+              <Icon
+                iconType="plusFilledBlueIcon"
+                onClick={() => setIsSelectUserVisible(true)}
+              />
+            </div>
+          </Modal>
+          {isSelectUserVisible && userData ? (
+            <>
+              <AddUserModel
+                isSelectUserVisible={isSelectUserVisible}
+                setIsSelectUserVisible={setIsSelectUserVisible}
+                onSubmit={onUserSubmit}
+                userData={userData}
+                pushIdIntoUserArray={pushIdIntoUserArray}
+                userIdArray={userIdArray}
+              />
+            </>
+          ) : null}
+        </form>
+      </FormProvider>
+    </>
+  );
+};
+export default AddStreamModel;

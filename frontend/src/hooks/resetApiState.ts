@@ -1,0 +1,71 @@
+// ** Import Packages **
+import { useDispatch } from 'react-redux';
+
+// ** APIS **
+import { accountApi } from 'redux/api/accountApi';
+import { activityApi } from 'redux/api/activityApi';
+import { activityResultApi } from 'redux/api/activityResultApi';
+import { activityTypeApi } from 'redux/api/activityTypeApi';
+import baseQueryApi from 'redux/api/baseQueryApi';
+import { columnApi } from 'redux/api/columnApi';
+import { companyDetailApi } from 'redux/api/companyDetailApi';
+import { contactApi } from 'redux/api/contactApi';
+import { dealLostReasonApi } from 'redux/api/dealLostReasonApi';
+import { dealStageHistoryApi } from 'redux/api/dealStageHistoryApi';
+import { departmentApi } from 'redux/api/departmentApi';
+import { gmailApi } from 'redux/api/gmailApi';
+import { jobRoleApi } from 'redux/api/jobRoleApi';
+import { leadApi } from 'redux/api/leadApi';
+import { leadDealSourceApi } from 'redux/api/leadDealSourceApi';
+import { leadStatusApi } from 'redux/api/leadStatusApi';
+import { leadTempStatusApi } from 'redux/api/leadTempStatusApi';
+import { noteApi } from 'redux/api/noteApi';
+import { notificationSettingApi } from 'redux/api/notificationSettingApi';
+import { phoneTypeApi } from 'redux/api/phoneTypeApi';
+import { pipelineApi } from 'redux/api/pipelineApi';
+import { profilesApi } from 'redux/api/profileApi';
+import { snippetCategoryApi } from 'redux/api/snippetCategoryApi';
+import { snippetSettingApi } from 'redux/api/snippetSettingApi';
+import { scheduleActivityApi } from 'redux/api/stayInTouchApi';
+import { tagApi } from 'redux/api/tagApi';
+import { timelineApi } from 'redux/api/timelineApi';
+import { userApi } from 'redux/api/userApi';
+import { zoomApi } from 'redux/api/zoomApi';
+
+export const resetApiState = () => {
+  const dispatch = useDispatch();
+  const resetAllApiState = async () => {
+    dispatch(tagApi.util.resetApiState());
+    dispatch(leadApi.util.resetApiState());
+    dispatch(userApi.util.resetApiState());
+    dispatch(zoomApi.util.resetApiState());
+    dispatch(noteApi.util.resetApiState());
+    dispatch(gmailApi.util.resetApiState());
+    dispatch(columnApi.util.resetApiState());
+    dispatch(accountApi.util.resetApiState());
+    dispatch(contactApi.util.resetApiState());
+    dispatch(jobRoleApi.util.resetApiState());
+    dispatch(pipelineApi.util.resetApiState());
+    dispatch(activityApi.util.resetApiState());
+    dispatch(timelineApi.util.resetApiState());
+    dispatch(accountApi.util.resetApiState());
+    dispatch(contactApi.util.resetApiState());
+    dispatch(profilesApi.util.resetApiState());
+    dispatch(baseQueryApi.util.resetApiState());
+    dispatch(phoneTypeApi.util.resetApiState());
+    dispatch(departmentApi.util.resetApiState());
+    dispatch(leadStatusApi.util.resetApiState());
+    dispatch(activityTypeApi.util.resetApiState());
+    dispatch(companyDetailApi.util.resetApiState());
+    dispatch(snippetSettingApi.util.resetApiState());
+    dispatch(dealLostReasonApi.util.resetApiState());
+    dispatch(leadDealSourceApi.util.resetApiState());
+    dispatch(snippetCategoryApi.util.resetApiState());
+    dispatch(activityResultApi.util.resetApiState());
+    dispatch(leadTempStatusApi.util.resetApiState());
+    dispatch(dealStageHistoryApi.util.resetApiState());
+    dispatch(notificationSettingApi.util.resetApiState());
+    dispatch(scheduleActivityApi.util.resetApiState());
+  };
+  return { resetAllApiState };
+};

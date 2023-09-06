@@ -1,0 +1,153 @@
+{
+  "name": "my-app",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@hookform/resolvers": "^2.9.8",
+    "@react-oauth/google": "^0.2.8",
+    "@reduxjs/toolkit": "^1.8.5",
+    "@sentry/cli": "^2.20.4",
+    "@sentry/react": "^7.61.1",
+    "@sentry/tracing": "^7.55.0",
+    "@syncfusion/ej2-react-calendars": "^20.4.38",
+    "@syncfusion/ej2-react-dropdowns": "^20.4.40",
+    "@syncfusion/ej2-react-inplace-editor": "^20.4.42",
+    "@syncfusion/ej2-react-inputs": "^20.4.54",
+    "@syncfusion/ej2-react-kanban": "^20.4.40",
+    "@syncfusion/ej2-react-maps": "^20.4.48",
+    "@syncfusion/ej2-react-richtexteditor": "^20.4.48",
+    "@syncfusion/ej2-react-schedule": "^20.4.44",
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react": "^13.4.0",
+    "@testing-library/user-event": "^13.5.0",
+    "@tippyjs/react": "^4.2.6",
+    "@types/d3": "^7.4.0",
+    "@types/jest": "^27.5.2",
+    "@types/node": "^16.11.59",
+    "@types/react": "^18.0.20",
+    "@types/react-beautiful-dnd": "^13.1.3",
+    "@types/react-lottie": "^1.2.6",
+    "@types/react-slick": "^0.23.10",
+    "@types/react-text-mask": "^5.4.11",
+    "@types/slick-carousel": "^1.6.37",
+    "ag-grid-community": "^28.2.0",
+    "ag-grid-enterprise": "^28.2.1",
+    "ag-grid-react": "^28.2.0",
+    "axios": "^0.27.2",
+    "d3-hierarchy": "^3.1.2",
+    "d3-timer": "^3.0.1",
+    "date-fns-tz": "^1.3.7",
+    "emoji-picker-react": "^4.4.9",
+    "global-tld-list": "^0.0.1090",
+    "highcharts": "^10.3.3",
+    "highcharts-react-official": "^3.1.0",
+    "html-react-parser": "^3.0.8",
+    "html-to-text": "^9.0.4",
+    "inputmask": "^5.0.7",
+    "jssip": "^3.10.0",
+    "lottie-react": "^2.4.0",
+    "react": "^18.2.0",
+    "react-apple-login": "^1.1.6",
+    "react-beautiful-dnd": "^13.1.1",
+    "react-beautiful-dnd-grid": "^0.1.3-alpha",
+    "react-datepicker": "^4.8.0",
+    "react-dom": "^18.2.0",
+    "react-google-autocomplete": "^2.7.3",
+    "react-hook-form": "^7.43.9",
+    "react-infinite-scroll-component": "^6.1.0",
+    "react-phone-input-2": "^2.15.1",
+    "react-places-autocomplete": "^7.3.0",
+    "react-portal": "^4.2.2",
+    "react-redux": "^8.0.2",
+    "react-router-dom": "6.0.0-alpha.5",
+    "react-scripts": "5.0.1",
+    "react-select": "^5.6.0",
+    "react-slick": "^0.29.0",
+    "react-text-mask": "^5.5.0",
+    "react-viewer": "^3.2.2",
+    "reactflow": "^11.7.4",
+    "redux-persist": "^6.0.0",
+    "rrule": "^2.7.2",
+    "slick-carousel": "^1.8.1",
+    "socket.io-client": "^4.5.3",
+    "typescript": "^4.8.3",
+    "use-deep-compare-effect": "^1.8.1",
+    "web-vitals": "^2.1.4",
+    "webpack": "^5.74.0",
+    "yup": "^0.32.11"
+  },
+  "main": "public/electron.js",
+  "homepage": "/",
+  "scripts": {
+    "start": "react-scripts --max_old_space_size=12228 start",
+    "build": "env-cmd -f .env.production react-scripts build",
+    "react-build": "PUBLIC_URL=/ env-cmd -f .env.production react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "lint": "eslint ./src",
+    "lint-fix": "eslint --fix ./src"
+  },
+  "author": "Testing <test@gmail.com>",
+  "build": {
+    "appId": "i-point-crm",
+    "files": [
+      "build/**/*",
+      "node_modules/**/*"
+    ],
+    "linux": {
+      "target": [
+        "deb"
+      ],
+      "category": "Utility"
+    },
+    "mac": {
+      "target": [
+        "tar.gz"
+      ],
+      "category": "Utility"
+    },
+    "win": {
+      "target": "nsis"
+    },
+    "nsis": {
+      "oneClick": false,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": true
+    }
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
+    "@types/html-to-text": "^9.0.0",
+    "@types/inputmask": "^5.0.3",
+    "@types/js-cookie": "^3.0.3",
+    "@types/react-datepicker": "^4.4.2",
+    "@types/react-mentions": "^4.1.8",
+    "@types/react-places-autocomplete": "^7.2.9",
+    "@types/react-portal": "^4.0.4",
+    "autoprefixer": "^10.4.11",
+    "concurrently": "^7.4.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-config-prettier": "^8.5.0",
+    "postcss": "^8.4.16",
+    "tailwindcss": "^3.1.8",
+    "wait-on": "^6.0.1"
+  }
+}

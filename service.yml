@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: ipoint-frontend-stage-service
+  namespace: ipoint-stage
+
+spec:
+  selector:
+    app: ipoint-frontend-stage
+  ports:
+    - protocol: TCP
+      port: 81 # The port your service will listen on within the cluster
+      targetPort: 80  # The port your app is listening on in the container
+  type: NodePort  # Use LoadBalancer if you want to expose the service externally
